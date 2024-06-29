@@ -3,7 +3,9 @@ package com.app.project.controller;
 
 import com.app.project.baseframework.controller.BaseController;
 import com.app.project.baseframework.exception.BaseException;
+import com.app.project.entity.City;
 import com.app.project.entity.Country;
+import com.app.project.entity.State;
 import com.app.project.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,17 @@ public class LocationController extends BaseController {
     public ResponseEntity<List<Country>> countryDetails() throws BaseException {
         logger.info("countryDetails master data");
         return new ResponseEntity<>(locationService.countryDetails(), HttpStatus.OK);
+    }
+    @GetMapping(value = ApiRoute.LOCATION_STATE_BY_COUNTRY_ID)
+    public ResponseEntity<List<State>> stateDetailsByCountryId(@RequestParam(value = "countryId") Long countryId) throws BaseException {
+        logger.info("stateDetailsByCountryId master data");
+        return new ResponseEntity<>(locationService.stateDetailsByCountryId(countryId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = ApiRoute.LOCATION_CITY_BY_STATE_ID)
+    public ResponseEntity<List<City>> cityDetailsByStateId(@RequestParam(value = "stateId") Long stateId) throws BaseException {
+        logger.info("cityDetailsByStateId master data");
+        return new ResponseEntity<>(locationService.cityDetailsByStateId(stateId), HttpStatus.OK);
     }
 
 }

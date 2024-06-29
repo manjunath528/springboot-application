@@ -41,6 +41,56 @@
                         cycle="true"
         />
     </changeSet>
+    <changeSet id="state" author="Manjunath Reddy">
+        <createTable tableName="state">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_STATE_ID"/>
+            </column>
+            <column name="time_zone" type="varchar(128)"/>
+            <column name="country_id" type="bigint"/>
+            <column name="state" type="varchar(128)"/>
+            <column name="offset" type="varchar(128)"/>
+            <column name="state_with_time_zone" type="varchar(128)"/>
+        </createTable>
+        <createSequence sequenceName="sequence_state"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint baseColumnNames="country_id"
+                                 baseTableName="state"
+                                 constraintName="FMC_FK_COUNTRY_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="country"/>
+    </changeSet>
+
+    <changeSet id="city" author="Manjunath Reddy">
+        <createTable tableName="city">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CITY_ID"/>
+            </column>
+            <column name="state_id" type="bigint"/>
+            <column name="city" type="varchar(128)"/>
+        </createTable>
+        <createSequence sequenceName="sequence_city"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+        <addForeignKeyConstraint baseColumnNames="state_id"
+                                 baseTableName="city"
+                                 constraintName="FMC_FK_STATE_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="state"/>
+
+    </changeSet>
+
 
 
 
