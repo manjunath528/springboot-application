@@ -1,0 +1,47 @@
+<!-- Database changeset file created by Manjunath Reddy -->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="user_account" author="Manjunath Reddy">
+        <createTable tableName="user_account">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_USER_ID"/>
+            </column>
+            <column name="login_id" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="email_id" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(128)"/>
+            <column name="status" type="varchar(128)"/>
+            <column name="created_ts" type="datetime"/>
+            <column name="updated_ts" type="datetime"/>
+        </createTable>
+        <createSequence sequenceName="sequence_user_account"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+    </changeSet>
+    <changeSet id="country" author="Manjunath Reddy">
+        <createTable tableName="country">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_COUNTRY_ID"/>
+            </column>
+            <column name="country" type="varchar(128)"/>
+        </createTable>
+        <createSequence sequenceName="sequence_country"
+                        minValue="1"
+                        startValue="1"
+                        incrementBy="1"
+                        cycle="true"
+        />
+    </changeSet>
+
+
+
+</databaseChangeLog>
