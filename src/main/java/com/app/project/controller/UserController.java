@@ -44,6 +44,29 @@ public class UserController extends BaseController {
         return new ResponseEntity<>(userService.userLogout(userLogOutRequest), HttpStatus.OK);
     }
 
+    @PostMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    public ResponseEntity<UserAccountResponse> saveUserAccountProfile(@RequestBody UserAccountRequest userAccountRequest) throws BaseException {
+        logger.info("saveUserAccountProfile: Received");
+        return new ResponseEntity<>(userService.saveOrUpdateUserAccountProfile(userAccountRequest, true), HttpStatus.OK);
+    }
+
+    @PutMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    public ResponseEntity<UserAccountResponse> updateUserAccountProfile(@RequestBody UserAccountRequest userAccountRequest) throws BaseException {
+        logger.info("updateUserAccountProfile: Received");
+        return new ResponseEntity<>(userService.saveOrUpdateUserAccountProfile(userAccountRequest, false), HttpStatus.OK);
+    }
+    @GetMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    public ResponseEntity<UserAccountProfileResponse> retrieveUserAccountProfileByLoginId(@RequestParam(value = "loginId") String loginId) throws BaseException {
+        logger.info("retrieveUserAccountProfileByLoginId: Received for loginId -> {}", loginId);
+        return new ResponseEntity<>(userService.retrieveUserAccountProfileByLoginId(loginId), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiRoute.USER_ACCOUNT_PROFILE_RETRIEVE)
+    public ResponseEntity<UserAccountProfileResponse> retrieveUserAccountProfile(@RequestBody RetrieveUserProfileRequest retrieveUserProfileRequest) throws BaseException {
+        logger.info("retrieveUserAccountProfile: Received  -> {}", retrieveUserProfileRequest);
+        return new ResponseEntity<>(userService.retrieveUserAccountProfile(retrieveUserProfileRequest), HttpStatus.OK);
+    }
+
 
 
 }

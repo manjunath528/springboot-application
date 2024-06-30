@@ -91,6 +91,58 @@
 
     </changeSet>
 
+    <changeSet id="user_personal_details" author="Manjunath Reddy">
+    <createTable tableName="user_personal_details">
+        <column name="id" type="bigint">
+            <constraints primaryKey="true" nullable="false" primaryKeyName="PK_USER_PERSONAL_DETAILS_ID"/>
+        </column>
+        <column name="login_id" type="varchar(128)"/>
+        <column name="first_name" type="varchar(128)"/>
+        <column name="last_name" type="varchar(128)"/>
+        <column name="mobile_number" type="varchar(128)"/>
+        <column name="country_id" type="bigint"/>
+        <column name="state_id" type="bigint"/>
+        <column name="city_id" type="bigint"/>
+        <column name="created_ts" type="datetime"/>
+        <column name="updated_ts" type="datetime"/>
+    </createTable>
+    <createSequence sequenceName="sequence_user_personal_details"
+                    minValue="1"
+                    startValue="1"
+                    incrementBy="1"
+                    cycle="true"
+    />
+        <addForeignKeyConstraint baseColumnNames="login_id"
+                                 baseTableName="user_personal_details"
+                                 constraintName="FMC_FK_USER_PERSONAL_DETAILS_LOGIN_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="login_id"
+                                 referencedTableName="user_account"/>
+        <addForeignKeyConstraint baseColumnNames="country_id"
+                                 baseTableName="user_personal_details"
+                                 constraintName="FMC_FK_USER_PERSONAL_DETAILS_COUNTRY_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="country"/>
+        <addForeignKeyConstraint baseColumnNames="state_id"
+                                 baseTableName="user_personal_details"
+                                 constraintName="FMC_FK_USER_PERSONAL_DETAILS_STATE_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="state"/>
+        <addForeignKeyConstraint baseColumnNames="city_id"
+                                 baseTableName="user_personal_details"
+                                 constraintName="FMC_FK_USER_PERSONAL_DETAILS_CITY_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="city"/>
+
+    </changeSet>
+
 
 
 

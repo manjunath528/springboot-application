@@ -13,4 +13,11 @@ public interface UserService {
 
     UserLogOutResponse userLogout(UserLogOutRequest userLogOutRequest) throws SystemException;
 
+    UserAccountResponse saveOrUpdateUserAccountProfile(UserAccountRequest userAccountRequest, boolean statusUpdateFlag) throws SystemException;
+
+    UserAccountProfileResponse retrieveUserAccountProfileByLoginId(String loginId) throws SystemException;
+
+    UserAccountProfileResponse retrieveUserAccountProfile(RetrieveUserProfileRequest retrieveUserProfileRequest) throws SystemException;
+
+
 }
