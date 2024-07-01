@@ -2,8 +2,10 @@ package com.app.project.service.impl;
 
 import com.app.project.baseframework.exception.enums.ApiErrors;
 import com.app.project.entity.UserAccount;
+import com.app.project.entity.UserHealthDetails;
 import com.app.project.entity.UserPersonalDetails;
 import com.app.project.repository.UserAccountRepository;
+import com.app.project.repository.UserHealthDetailsRepository;
 import com.app.project.repository.UserPersonalDetailsRepository;
 import com.app.project.service.UserService;
 import com.app.project.service.dto.*;
@@ -17,9 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.app.project.baseframework.exception.SystemException;
 
-import java.util.HashMap;
-import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -30,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserPersonalDetailsRepository userPersonalDetailsRepository;
+    @Autowired
+    UserHealthDetailsRepository userHealthDetailsRepository;
 
     @Override
     public UserSignUpResponse signUp(UserSignUpRequest userSignUpRequest) throws SystemException {
@@ -52,7 +53,8 @@ public class UserServiceImpl implements UserService {
         userAccount.setLoginId(userSignUpRequest.getLoginId());
         userAccount.setEmailId(userSignUpRequest.getEmailId());
         userAccount.setPassword(userSignUpRequest.getPassword());
-        userAccount.setStatus(Constants.STATUS_REGISTERED);
+        userAccount.setPersonal_details_status(Constants.STATUS_REGISTERED);
+        userAccount.setHealth_details_status(Constants.STATUS_NOT_UPLOADED);
         userAccount.setCreatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
         userAccount.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
         try {
@@ -65,7 +67,8 @@ public class UserServiceImpl implements UserService {
         UserSignUpResponse userSignUpResponse = new UserSignUpResponse();
         userSignUpResponse.setLoginId(userAccount.getLoginId());
         userSignUpResponse.setEmailId(userAccount.getEmailId());
-        userSignUpResponse.setAccountStatus(userAccount.getStatus());
+        userSignUpResponse.setPersonal_details_status(userAccount.getPersonal_details_status());
+        userSignUpResponse.setHealth_details_status(userAccount.getHealth_details_status());
         logger.info("Response sent successfully");
         return userSignUpResponse;
     }
@@ -91,7 +94,7 @@ public class UserServiceImpl implements UserService {
         }
         userLogInResponse.setLoginId(userLogInRequest.getLoginId());
         userLogInResponse.setEmailId(userAccount.getEmailId());
-        userLogInResponse.setAccountStatus(userAccount.getStatus());
+        userLogInResponse.setAccountStatus(userAccount.getPersonal_details_status());
         return userLogInResponse;
     }
 
@@ -134,7 +137,7 @@ public class UserServiceImpl implements UserService {
                 logger.info("saveOrUpdateUserAccountProfile: Existing profile details NOT available. Saving for loginId -> {}", userAccountRequest.getLoginId());
                 userPersonalDetails = new UserPersonalDetails();
                 userPersonalDetails.setCreatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
-                userAccount.setStatus(Constants.STATUS_ACTIVE);
+                userAccount.setPersonal_details_status(Constants.STATUS_ACTIVE);
             } else {
                 logger.info("saveOrUpdateUserAccountProfile: Existing profile details available. Updating for loginId -> {}", userAccountRequest.getLoginId());
             }
@@ -157,20 +160,20 @@ public class UserServiceImpl implements UserService {
         if (statusUpdateFlag) {
             if (userPersonalDetailsRepository.findByLoginId(userAccountRequest.getLoginId()) == null) {
                 logger.info("saveOrUpdateUserAccountProfile: SignUp requirements not completed for loginId -> {}, status -> {}", userAccountRequest.getLoginId(), Constants.STATUS_REGISTERED);
-                userAccountResponse.setStatus(Constants.STATUS_REGISTERED);
+                userAccountResponse.setPersonal_details_status(Constants.STATUS_REGISTERED);
             } else
             {
                 logger.info("saveOrUpdateUserAccountProfile: SignUp requirements are completed for loginId -> {}, status -> {}", userAccountRequest.getLoginId(), Constants.STATUS_ACTIVE);
                 //messageCenterService.triggerMessage(Constants.SOURCE_SYSTEM, userAccountRequest.getLoginId(), Constants.MESSAGE_WELCOME, null);
-                userAccountResponse.setStatus(Constants.STATUS_ACTIVE);
+                userAccountResponse.setPersonal_details_status(Constants.STATUS_ACTIVE);
 
         }
         }
 
         else {
             userAccount = userAccountRepository.findByLoginId(userAccountRequest.getLoginId().toLowerCase());
-            logger.info("saveOrUpdateUserAccountProfile: Status update not required for loginId -> {}, status -> {}", userAccountRequest.getLoginId(), userAccount.getStatus());
-            userAccountResponse.setStatus(userAccount.getStatus());
+            logger.info("saveOrUpdateUserAccountProfile: Status update not required for loginId -> {}, status -> {}", userAccountRequest.getLoginId(), userAccount.getPersonal_details_status());
+            userAccountResponse.setPersonal_details_status(userAccount.getPersonal_details_status());
         }
         logger.info("Response sent successfully for loginId -> {}", userAccountRequest.getLoginId());
         return userAccountResponse;
@@ -191,7 +194,7 @@ public class UserServiceImpl implements UserService {
         UserAccountProfileResponse userAccountProfileResponse = new UserAccountProfileResponse();
         userAccountProfileResponse.setLoginId(loginId);
         userAccountProfileResponse.setEmailId(userAccount.getEmailId());
-        userAccountProfileResponse.setAccountStatus(userAccount.getStatus());
+        userAccountProfileResponse.setAccountStatus(userAccount.getPersonal_details_status());
         userAccountProfileResponse.setUserPersonalDetails(userPersonalDetailsRepository.findByLoginId(loginId));
         return userAccountProfileResponse;
     }
@@ -236,6 +239,69 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public UserHealthProfileResponse saveOrUpdateUserHealthProfile(UserHealthProfileRequest userHealthProfileRequest, boolean statusUpdateFlag) throws SystemException {
+        logger.info("Request received -> {}, statusUpdateFlag -> {}", userHealthProfileRequest, statusUpdateFlag);
+        UserHealthProfileResponse userHealthProfileResponse = new UserHealthProfileResponse();
+        userHealthProfileResponse.setLoginId(userHealthProfileRequest.getLoginId());
+        UserAccount userAccount = userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId());
+        logger.info("saveOrUpdateUserHealthProfile: userHealthProfileRequest -> {}, statusUpdateFlag-> {}", userHealthProfileRequest, statusUpdateFlag);
+        if (userHealthProfileRequest == null || Strings.isNullOrEmpty(userHealthProfileRequest.getLoginId())) {
+            logger.error("saveOrUpdateUserHealthProfile: Missing mandatory data -> {}", userHealthProfileRequest);
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        if (userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId()) == null) {
+            logger.error("saveOrUpdateUserHealthProfile: User account doesn't exist for loginId -> {}", userHealthProfileRequest.getLoginId());
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+        if (userHealthProfileRequest.getHealthInformation() != null) {
+            logger.info("saveOrUpdateUserHealthProfile: Health Information -> {}", userHealthProfileRequest.getHealthInformation());
+            UserHealthDetails userHealthDetails = userHealthDetailsRepository.findByLoginId(userHealthProfileRequest.getLoginId());
+            if (userHealthDetails == null) {
+                logger.info("saveOrUpdateUserHealthProfile: Existing health details NOT available. Saving for loginId -> {}", userHealthProfileRequest.getLoginId());
+                userHealthDetails = new UserHealthDetails();
+                userHealthDetails.setCreatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+                userAccount.setHealth_details_status(Constants.STATUS_UPLOADED);
+            } else {
+                logger.info("saveOrUpdateUserHealthProfile: Existing health details available. Updating for loginId -> {}", userHealthProfileRequest.getLoginId());
+            }
+            userHealthDetails.setLoginId(userHealthProfileRequest.getLoginId());
+            userHealthDetails.setAge(userHealthProfileRequest.getHealthInformation().getAge());
+            userHealthDetails.setGender(userHealthProfileRequest.getHealthInformation().getGender());
+            userHealthDetails.setHeight(userHealthProfileRequest.getHealthInformation().getHeight());
+            userHealthDetails.setCurrentWeight(userHealthProfileRequest.getHealthInformation().getCurrentWeight());
+            userHealthDetails.setGoalWeight(userHealthProfileRequest.getHealthInformation().getGoalWeight());
+            userHealthDetails.setActivityLevel(userHealthProfileRequest.getHealthInformation().getActivityLevel());
+            userHealthDetails.setTargetCalories(userHealthProfileRequest.getHealthInformation().getTargetCalories());
+
+            userHealthDetails.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
+            userHealthDetailsRepository.save(userHealthDetails);
+            logger.info("saveOrUpdateUserHealthProfile: Health Information saved successfully -> {}", userHealthProfileRequest.getHealthInformation());
+        }
+
+
+
+        if (statusUpdateFlag) {
+            if (userHealthDetailsRepository.findByLoginId(userHealthProfileRequest.getLoginId()) == null) {
+                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements not completed for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), Constants.STATUS_REGISTERED);
+                userHealthProfileResponse.setHealth_details_status(Constants.STATUS_NOT_UPLOADED);
+            } else
+            {
+                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements are completed for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), Constants.STATUS_ACTIVE);
+
+                userHealthProfileResponse.setHealth_details_status(Constants.STATUS_UPLOADED);
+
+            }
+        }
+
+        else {
+            userAccount = userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId().toLowerCase());
+            logger.info("saveOrUpdateUserHealthProfile: Status update not required for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), userAccount.getPersonal_details_status());
+            userHealthProfileResponse.setHealth_details_status(userAccount.getPersonal_details_status());
+        }
+        logger.info("Response sent successfully for loginId -> {}", userHealthProfileRequest.getLoginId());
+        return userHealthProfileResponse;
+    }
 
 
 }

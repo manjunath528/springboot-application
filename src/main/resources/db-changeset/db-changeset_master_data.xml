@@ -5,6 +5,9 @@
                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="load_data_master_data" author="Manjunath Reddy">
+        <loadData tableName="country" file="db_data/country.csv"/>
+        <loadData tableName="state" file="db_data/state.csv"/>
+        <loadData tableName="city" file="db_data/city.csv"/>
 
     </changeSet>
 </databaseChangeLog>

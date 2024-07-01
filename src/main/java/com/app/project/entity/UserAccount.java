@@ -34,8 +34,12 @@ public class UserAccount implements Serializable {
     private String password;
 
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "personal_details_status")
+    private String personal_details_status;
+
+    @Column(name = "health_details_status")
+
+    private String health_details_status;
 
     @Column(name = "created_ts")
     private Timestamp createdTs;
@@ -78,12 +82,20 @@ public class UserAccount implements Serializable {
     }
 
 
-    public String getStatus() {
-        return status;
+    public String getPersonal_details_status() {
+        return personal_details_status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPersonal_details_status(String status) {
+        this.personal_details_status = status;
+    }
+
+    public String getHealth_details_status() {
+        return health_details_status;
+    }
+
+    public void setHealth_details_status(String health_details_status) {
+        this.health_details_status = health_details_status;
     }
 
     public Timestamp getCreatedTs() {
@@ -131,7 +143,8 @@ public class UserAccount implements Serializable {
                 ", loginId='" + loginId + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
-                ", status='" + status + '\'' +
+                ", status='" + personal_details_status + '\'' +
+                ", health_details_status='" + health_details_status + '\'' +
                 ", createdTs=" + createdTs +
                 ", updatedTs=" + updatedTs +
                 '}';

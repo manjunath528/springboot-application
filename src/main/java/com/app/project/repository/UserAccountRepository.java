@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by Vijayaprakash Reddy
+ * Created by Manjunath Reddy
  */
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {

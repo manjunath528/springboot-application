@@ -1,12 +1,9 @@
 package com.app.project.service.dto;
 
-
 import java.io.Serializable;
 
-public class UserSignUpResponse implements Serializable {
+public class UserHealthProfileResponse implements Serializable {
     private String loginId;
-    private String emailId;
-    private String personal_details_status;
     private String health_details_status;
 
     public String getLoginId() {
@@ -15,23 +12,6 @@ public class UserSignUpResponse implements Serializable {
 
     public void setLoginId(String loginId) {
         this.loginId = loginId;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
-
-    public String getPersonal_details_status() {
-        return personal_details_status;
-    }
-
-    public void setPersonal_details_status(String personal_details_status) {
-        this.personal_details_status = personal_details_status;
     }
 
     public String getHealth_details_status() {
@@ -44,10 +24,8 @@ public class UserSignUpResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "UserSignUpResponse{" +
+        return "UserHealthProfileResponse{" +
                 "loginId='" + loginId + '\'' +
-                ", emailId='" + emailId + '\'' +
-                ", personal_details_status='" + personal_details_status + '\'' +
                 ", health_details_status='" + health_details_status + '\'' +
                 '}';
     }

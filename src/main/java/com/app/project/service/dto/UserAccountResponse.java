@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class UserAccountResponse implements Serializable {
     private String loginId;
-    private String status;
+    private String personal_details_status;
 
     public String getLoginId() {
         return loginId;
@@ -15,19 +15,21 @@ public class UserAccountResponse implements Serializable {
         this.loginId = loginId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPersonal_details_status() {
+        return personal_details_status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+
+    public void setPersonal_details_status(String personoal_details_status) {
+        this.personal_details_status = personoal_details_status;
+
     }
 
     @Override
     public String toString() {
         return "UserAccountResponse{" +
                 "loginId='" + loginId + '\'' +
-                ", status='" + status + '\'' +
+                ", personal_details_status='" + personal_details_status + '\'' +
                 '}';
     }
 }

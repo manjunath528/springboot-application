@@ -3,7 +3,6 @@ package com.app.project.controller;
 
 import com.app.project.baseframework.controller.BaseController;
 import com.app.project.baseframework.exception.BaseException;
-import com.app.project.baseframework.exception.HttpException;
 import com.app.project.service.UserService;
 import com.app.project.service.dto.*;
 import org.slf4j.Logger;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.SystemException;
 
 @RestController
 @RequestMapping(ApiRoute.BASE_MAPPING_API_V1)
@@ -44,27 +41,39 @@ public class UserController extends BaseController {
         return new ResponseEntity<>(userService.userLogout(userLogOutRequest), HttpStatus.OK);
     }
 
-    @PostMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    @PostMapping(value = ApiRoute.USER_ACCOUNT_PERSONAL_PROFILE)
     public ResponseEntity<UserAccountResponse> saveUserAccountProfile(@RequestBody UserAccountRequest userAccountRequest) throws BaseException {
         logger.info("saveUserAccountProfile: Received");
         return new ResponseEntity<>(userService.saveOrUpdateUserAccountProfile(userAccountRequest, true), HttpStatus.OK);
     }
 
-    @PutMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    @PutMapping(value = ApiRoute.USER_ACCOUNT_PERSONAL_PROFILE)
     public ResponseEntity<UserAccountResponse> updateUserAccountProfile(@RequestBody UserAccountRequest userAccountRequest) throws BaseException {
         logger.info("updateUserAccountProfile: Received");
         return new ResponseEntity<>(userService.saveOrUpdateUserAccountProfile(userAccountRequest, false), HttpStatus.OK);
     }
-    @GetMapping(value = ApiRoute.USER_ACCOUNT_PROFILE)
+    @GetMapping(value = ApiRoute.USER_ACCOUNT_PERSONAL_PROFILE)
     public ResponseEntity<UserAccountProfileResponse> retrieveUserAccountProfileByLoginId(@RequestParam(value = "loginId") String loginId) throws BaseException {
         logger.info("retrieveUserAccountProfileByLoginId: Received for loginId -> {}", loginId);
         return new ResponseEntity<>(userService.retrieveUserAccountProfileByLoginId(loginId), HttpStatus.OK);
     }
 
-    @PostMapping(value = ApiRoute.USER_ACCOUNT_PROFILE_RETRIEVE)
+    @PostMapping(value = ApiRoute.USER_ACCOUNT_PERSONAL_PROFILE_RETRIEVE)
     public ResponseEntity<UserAccountProfileResponse> retrieveUserAccountProfile(@RequestBody RetrieveUserProfileRequest retrieveUserProfileRequest) throws BaseException {
         logger.info("retrieveUserAccountProfile: Received  -> {}", retrieveUserProfileRequest);
         return new ResponseEntity<>(userService.retrieveUserAccountProfile(retrieveUserProfileRequest), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiRoute.USER_ACCOUNT_HEALTH_PROFILE)
+    public ResponseEntity<UserHealthProfileResponse> saveUserHealthProfile(@RequestBody UserHealthProfileRequest userHealthProfileRequest) throws BaseException {
+        logger.info("saveOrUpdateUserHealthProfile: Received");
+        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthProfileRequest, true), HttpStatus.OK);
+    }
+
+    @PutMapping(value = ApiRoute.USER_ACCOUNT_HEALTH_PROFILE)
+    public ResponseEntity<UserHealthProfileResponse> updateUserHealthProfile(@RequestBody UserHealthProfileRequest userHealthProfileRequest) throws BaseException {
+        logger.info("saveOrUpdateUserHealthProfile: Received");
+        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthProfileRequest, false), HttpStatus.OK);
     }
 
 

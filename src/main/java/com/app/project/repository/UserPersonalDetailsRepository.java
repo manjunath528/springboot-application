@@ -16,5 +16,4 @@ import java.util.Set;
 public interface UserPersonalDetailsRepository extends JpaRepository<UserPersonalDetails, Long> {
     @Query("SELECT userPersonalDetails from UserPersonalDetails userPersonalDetails where lower(userPersonalDetails.loginId)=lower(:loginId)")
     UserPersonalDetails findByLoginId(@Param("loginId") String loginId);
-
 }

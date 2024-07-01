@@ -20,11 +20,15 @@ public class ApiRoute {
     public static final String USER_FORGOT_PASSWORD = "/user/forgotPassword";
     public static final String USER_FORGOT_LOGINID = "/user/forgotLoginId";
     public static final String USER_UPDATE_PASSWORD = "/user/updatePassword";
-    public static final String USER_ACCOUNT_PROFILE = "/user/account/profile";
-    public static final String USER_ACCOUNT_PROFILE_RETRIEVE = "/user/account/retrieveProfile";
+    public static final String USER_ACCOUNT_PERSONAL_PROFILE = "/user/account/personalProfile";
+    public static final String USER_ACCOUNT_PERSONAL_PROFILE_RETRIEVE = "/user/account/retrievePersonalProfile";
+
+    public static final String USER_ACCOUNT_HEALTH_PROFILE = "/user/account/healthProfile";
+    public static final String USER_ACCOUNT_HEALTH_PROFILE_RETRIEVE = "/user/account/retrievehealthProfile";
     public static final String USER_ACCOUNT_LIST_DETAILS_DELETE = "/user/accountList/details";
     public static final String USER_THANKS = "/user/thanks";
     private ApiRoute() {
     }
+
 
 }
