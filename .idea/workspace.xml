@@ -6,19 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad50824c-b5d5-40dd-8b91-a7e72127051e" name="Changes" comment="first commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/common/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/controller/ApiRoute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/controller/ApiRoute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/entity/UserAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/entity/UserAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/repository/UserAccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/repository/UserAccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/repository/UserPersonalDetailsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/repository/UserPersonalDetailsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/service/dto/UserAccountResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/service/dto/UserAccountResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/service/dto/UserSignUpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/service/dto/UserSignUpResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/app/project/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/app/project/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db-changelog/master.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db-changelog/master.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_master_data.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_master_data.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db-changeset/db-changeset_2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +186,8 @@
       <workItem from="1719669236311" duration="92000" />
       <workItem from="1719669427999" duration="28000" />
       <workItem from="1719669551351" duration="4453000" />
-      <workItem from="1719740605204" duration="20441000" />
+      <workItem from="1719740605204" duration="20588000" />
+      <workItem from="1719943726331" duration="1549000" />
     </task>
     <task id="LOCAL-00001" summary="updated the JwtUtil class">
       <option name="closed" value="true" />
