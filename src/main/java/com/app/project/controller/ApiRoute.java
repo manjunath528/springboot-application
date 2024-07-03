@@ -25,7 +25,7 @@ public class ApiRoute {
 
     public static final String USER_ACCOUNT_HEALTH_PROFILE = "/user/account/healthProfile";
     public static final String USER_ACCOUNT_HEALTH_PROFILE_RETRIEVE = "/user/account/retrievehealthProfile";
-    public static final String USER_ACCOUNT_LIST_DETAILS_DELETE = "/user/accountList/details";
+    public static final String USER_ACCOUNT_DETAILS_DELETE = "/user/loginId/delete";
     public static final String USER_THANKS = "/user/thanks";
     private ApiRoute() {
     }

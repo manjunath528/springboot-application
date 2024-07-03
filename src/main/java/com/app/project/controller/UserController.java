@@ -75,7 +75,10 @@ public class UserController extends BaseController {
         logger.info("saveOrUpdateUserHealthProfile: Received");
         return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthProfileRequest, false), HttpStatus.OK);
     }
-
-
+    @DeleteMapping(value = ApiRoute.USER_ACCOUNT_DETAILS_DELETE)
+    public ResponseEntity<UserDeleteResponse> userAccountDetailsDelete(@RequestParam(value = "loginId") String loginId) throws BaseException {
+        logger.info("userAccountDetailsDelete: Received");
+        return new ResponseEntity<>(userService.userAccountDetailsDelete(loginId), HttpStatus.OK);
+    }
 
 }

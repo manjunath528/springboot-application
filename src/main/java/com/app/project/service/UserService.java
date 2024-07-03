@@ -21,5 +21,6 @@ public interface UserService {
 
     UserHealthProfileResponse saveOrUpdateUserHealthProfile(UserHealthProfileRequest userHealthProfileRequest, boolean statusUpdateFlag) throws SystemException;
 
+    UserDeleteResponse userAccountDetailsDelete(String loginId) throws SystemException;
 
 }

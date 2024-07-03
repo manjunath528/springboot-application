@@ -303,5 +303,40 @@ public class UserServiceImpl implements UserService {
         return userHealthProfileResponse;
     }
 
+    @Override
+    public UserDeleteResponse userAccountDetailsDelete(String loginId) throws SystemException {
+        logger.info("userAccountDetailsDelete: Request received -> {}", loginId);
+        UserDeleteResponse userDeleteResponse = new UserDeleteResponse();
+        userDeleteResponse.setLoginId(loginId);
+        if (loginId == null || Strings.isNullOrEmpty(loginId)) {
+            logger.error("userAccountDetailsDelete: Missing mandatory data -> {}", loginId);
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        if (userAccountRepository.findByLoginId(loginId) == null) {
+            logger.error("userAccountDetailsDelete: User account doesn't exist for loginId -> {}", loginId);
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+
+        if (userPersonalDetailsRepository.findByLoginId(loginId) != null) {
+            logger.info("userPersonalDetailsDelete: User Personal Details Information -> {}", userPersonalDetailsRepository.findByLoginId(loginId));
+            UserPersonalDetails userPersonalDetails = userPersonalDetailsRepository.findByLoginId(loginId);
+                logger.info("userPersonalDetailsDelete: Inactivate for userPersonalId -> {}", userPersonalDetails.getId());
+                userPersonalDetailsRepository.deleteById(userPersonalDetails.getId());
+                userDeleteResponse.setPersonal_details_status(Constants.STATUS_SUCCESS);
+            }
+
+        if (userHealthDetailsRepository.findByLoginId(loginId) != null) {
+            logger.info("userHealthDetailsDelete: User Personal Details Information -> {}", userHealthDetailsRepository.findByLoginId(loginId));
+            UserHealthDetails userHealthDetails = userHealthDetailsRepository.findByLoginId(loginId);
+            logger.info("userHealthDetailsDelete: Inactivate for userHealthId -> {}", userHealthDetails.getId());
+            userDeleteResponse.setHealth_details_status(Constants.STATUS_SUCCESS);
+        }
+        UserAccount userAccount = userAccountRepository.findByLoginId(loginId);
+        userAccountRepository.deleteById(userAccount.getId());
+        logger.info("userAccountDetailsDelete: Response sent successfully for loginId -> {}", userAccountRepository.findByLoginId(loginId));
+        return userDeleteResponse;
+    }
+
+
 
 }
