@@ -1,6 +1,6 @@
 package com.app.project.service.dto;
 
-public class UserHealthProfileRequest {
+public class UserHealthRequest {
     private String loginId;
     private HealthInformation healthInformation;
 

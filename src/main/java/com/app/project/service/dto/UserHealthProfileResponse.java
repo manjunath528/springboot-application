@@ -1,10 +1,12 @@
 package com.app.project.service.dto;
 
-import java.io.Serializable;
+import com.app.project.entity.UserHealthDetails;
 
-public class UserHealthProfileResponse implements Serializable {
+public class UserHealthProfileResponse {
     private String loginId;
-    private String health_details_status;
+    private String emailId;
+    private String accountStatus;
+    private UserHealthDetails userHealthDetails;
 
     public String getLoginId() {
         return loginId;
@@ -14,19 +16,37 @@ public class UserHealthProfileResponse implements Serializable {
         this.loginId = loginId;
     }
 
-    public String getHealth_details_status() {
-        return health_details_status;
+    public UserHealthDetails getUserHealthDetails() {
+        return userHealthDetails;
     }
 
-    public void setHealth_details_status(String health_details_status) {
-        this.health_details_status = health_details_status;
+    public void setUserHealthDetails(UserHealthDetails userHealthDetails) {
+        this.userHealthDetails = userHealthDetails;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
     @Override
     public String toString() {
         return "UserHealthProfileResponse{" +
                 "loginId='" + loginId + '\'' +
-                ", health_details_status='" + health_details_status + '\'' +
+                ", emailId='" + emailId + '\'' +
+                ", accountStatus='" + accountStatus + '\'' +
+                ", healthInformation=" + userHealthDetails +
                 '}';
     }
 }

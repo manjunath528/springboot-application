@@ -22,7 +22,7 @@ public class ApiRoute {
     public static final String USER_UPDATE_PASSWORD = "/user/updatePassword";
     public static final String USER_ACCOUNT_PERSONAL_PROFILE = "/user/account/personalProfile";
     public static final String USER_ACCOUNT_PERSONAL_PROFILE_RETRIEVE = "/user/account/retrievePersonalProfile";
-
+    public static final String USER_HEALTH_PROFILE_RETRIEVE = "/user/account/retrieveHealthProfile";
     public static final String USER_ACCOUNT_HEALTH_PROFILE = "/user/account/healthProfile";
     public static final String USER_ACCOUNT_HEALTH_PROFILE_RETRIEVE = "/user/account/retrievehealthProfile";
     public static final String USER_ACCOUNT_DETAILS_DELETE = "/user/loginId/delete";

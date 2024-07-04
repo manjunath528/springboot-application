@@ -190,6 +190,10 @@ public class UserServiceImpl implements UserService {
             logger.error("retrieveUserAccountProfileByLoginId: User account doesn't exists");
             throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
         }
+        if (userAccount != null && userAccount.getPersonal_details_status().equalsIgnoreCase(Constants.STATUS_REGISTERED)) {
+            logger.error("retrieveUserAccountProfileByLoginId: User account exists but not uploaded personal details status");
+            throw new SystemException(ApiErrors.USER_PERSONAL_STATUS_DOESNOT_EXISTS);
+        }
 
         UserAccountProfileResponse userAccountProfileResponse = new UserAccountProfileResponse();
         userAccountProfileResponse.setLoginId(loginId);
@@ -240,67 +244,67 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserHealthProfileResponse saveOrUpdateUserHealthProfile(UserHealthProfileRequest userHealthProfileRequest, boolean statusUpdateFlag) throws SystemException {
-        logger.info("Request received -> {}, statusUpdateFlag -> {}", userHealthProfileRequest, statusUpdateFlag);
-        UserHealthProfileResponse userHealthProfileResponse = new UserHealthProfileResponse();
-        userHealthProfileResponse.setLoginId(userHealthProfileRequest.getLoginId());
-        UserAccount userAccount = userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId());
-        logger.info("saveOrUpdateUserHealthProfile: userHealthProfileRequest -> {}, statusUpdateFlag-> {}", userHealthProfileRequest, statusUpdateFlag);
-        if (userHealthProfileRequest == null || Strings.isNullOrEmpty(userHealthProfileRequest.getLoginId())) {
-            logger.error("saveOrUpdateUserHealthProfile: Missing mandatory data -> {}", userHealthProfileRequest);
+    public UserHealthResponse saveOrUpdateUserHealthProfile(UserHealthRequest userHealthRequest, boolean statusUpdateFlag) throws SystemException {
+        logger.info("Request received -> {}, statusUpdateFlag -> {}", userHealthRequest, statusUpdateFlag);
+        UserHealthResponse userHealthResponse = new UserHealthResponse();
+        userHealthResponse.setLoginId(userHealthRequest.getLoginId());
+        UserAccount userAccount = userAccountRepository.findByLoginId(userHealthRequest.getLoginId());
+        logger.info("saveOrUpdateUserHealthProfile: userHealthProfileRequest -> {}, statusUpdateFlag-> {}", userHealthRequest, statusUpdateFlag);
+        if (userHealthRequest == null || Strings.isNullOrEmpty(userHealthRequest.getLoginId())) {
+            logger.error("saveOrUpdateUserHealthProfile: Missing mandatory data -> {}", userHealthRequest);
             throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
         }
-        if (userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId()) == null) {
-            logger.error("saveOrUpdateUserHealthProfile: User account doesn't exist for loginId -> {}", userHealthProfileRequest.getLoginId());
+        if (userAccountRepository.findByLoginId(userHealthRequest.getLoginId()) == null) {
+            logger.error("saveOrUpdateUserHealthProfile: User account doesn't exist for loginId -> {}", userHealthRequest.getLoginId());
             throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
         }
-        if (userHealthProfileRequest.getHealthInformation() != null) {
-            logger.info("saveOrUpdateUserHealthProfile: Health Information -> {}", userHealthProfileRequest.getHealthInformation());
-            UserHealthDetails userHealthDetails = userHealthDetailsRepository.findByLoginId(userHealthProfileRequest.getLoginId());
+        if (userHealthRequest.getHealthInformation() != null) {
+            logger.info("saveOrUpdateUserHealthProfile: Health Information -> {}", userHealthRequest.getHealthInformation());
+            UserHealthDetails userHealthDetails = userHealthDetailsRepository.findByLoginId(userHealthRequest.getLoginId());
             if (userHealthDetails == null) {
-                logger.info("saveOrUpdateUserHealthProfile: Existing health details NOT available. Saving for loginId -> {}", userHealthProfileRequest.getLoginId());
+                logger.info("saveOrUpdateUserHealthProfile: Existing health details NOT available. Saving for loginId -> {}", userHealthRequest.getLoginId());
                 userHealthDetails = new UserHealthDetails();
                 userHealthDetails.setCreatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
                 userAccount.setHealth_details_status(Constants.STATUS_UPLOADED);
             } else {
-                logger.info("saveOrUpdateUserHealthProfile: Existing health details available. Updating for loginId -> {}", userHealthProfileRequest.getLoginId());
+                logger.info("saveOrUpdateUserHealthProfile: Existing health details available. Updating for loginId -> {}", userHealthRequest.getLoginId());
             }
-            userHealthDetails.setLoginId(userHealthProfileRequest.getLoginId());
-            userHealthDetails.setAge(userHealthProfileRequest.getHealthInformation().getAge());
-            userHealthDetails.setGender(userHealthProfileRequest.getHealthInformation().getGender());
-            userHealthDetails.setHeight(userHealthProfileRequest.getHealthInformation().getHeight());
-            userHealthDetails.setCurrentWeight(userHealthProfileRequest.getHealthInformation().getCurrentWeight());
-            userHealthDetails.setGoalWeight(userHealthProfileRequest.getHealthInformation().getGoalWeight());
-            userHealthDetails.setActivityLevel(userHealthProfileRequest.getHealthInformation().getActivityLevel());
-            userHealthDetails.setTargetCalories(userHealthProfileRequest.getHealthInformation().getTargetCalories());
+            userHealthDetails.setLoginId(userHealthRequest.getLoginId());
+            userHealthDetails.setAge(userHealthRequest.getHealthInformation().getAge());
+            userHealthDetails.setGender(userHealthRequest.getHealthInformation().getGender());
+            userHealthDetails.setHeight(userHealthRequest.getHealthInformation().getHeight());
+            userHealthDetails.setCurrentWeight(userHealthRequest.getHealthInformation().getCurrentWeight());
+            userHealthDetails.setGoalWeight(userHealthRequest.getHealthInformation().getGoalWeight());
+            userHealthDetails.setActivityLevel(userHealthRequest.getHealthInformation().getActivityLevel());
+            userHealthDetails.setTargetCalories(userHealthRequest.getHealthInformation().getTargetCalories());
 
             userHealthDetails.setUpdatedTs(DateTimeFormatterUtil.getCurrentTimestampInUTC());
             userHealthDetailsRepository.save(userHealthDetails);
-            logger.info("saveOrUpdateUserHealthProfile: Health Information saved successfully -> {}", userHealthProfileRequest.getHealthInformation());
+            logger.info("saveOrUpdateUserHealthProfile: Health Information saved successfully -> {}", userHealthRequest.getHealthInformation());
         }
 
 
 
         if (statusUpdateFlag) {
-            if (userHealthDetailsRepository.findByLoginId(userHealthProfileRequest.getLoginId()) == null) {
-                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements not completed for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), Constants.STATUS_REGISTERED);
-                userHealthProfileResponse.setHealth_details_status(Constants.STATUS_NOT_UPLOADED);
+            if (userHealthDetailsRepository.findByLoginId(userHealthRequest.getLoginId()) == null) {
+                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements not completed for loginId -> {}, status -> {}", userHealthRequest.getLoginId(), Constants.STATUS_REGISTERED);
+                userHealthResponse.setHealth_details_status(Constants.STATUS_NOT_UPLOADED);
             } else
             {
-                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements are completed for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), Constants.STATUS_ACTIVE);
+                logger.info("saveOrUpdateUserHealthProfile: SignUp requirements are completed for loginId -> {}, status -> {}", userHealthRequest.getLoginId(), Constants.STATUS_ACTIVE);
 
-                userHealthProfileResponse.setHealth_details_status(Constants.STATUS_UPLOADED);
+                userHealthResponse.setHealth_details_status(Constants.STATUS_UPLOADED);
 
             }
         }
 
         else {
-            userAccount = userAccountRepository.findByLoginId(userHealthProfileRequest.getLoginId().toLowerCase());
-            logger.info("saveOrUpdateUserHealthProfile: Status update not required for loginId -> {}, status -> {}", userHealthProfileRequest.getLoginId(), userAccount.getPersonal_details_status());
-            userHealthProfileResponse.setHealth_details_status(userAccount.getPersonal_details_status());
+            userAccount = userAccountRepository.findByLoginId(userHealthRequest.getLoginId().toLowerCase());
+            logger.info("saveOrUpdateUserHealthProfile: Status update not required for loginId -> {}, status -> {}", userHealthRequest.getLoginId(), userAccount.getPersonal_details_status());
+            userHealthResponse.setHealth_details_status(userAccount.getPersonal_details_status());
         }
-        logger.info("Response sent successfully for loginId -> {}", userHealthProfileRequest.getLoginId());
-        return userHealthProfileResponse;
+        logger.info("Response sent successfully for loginId -> {}", userHealthRequest.getLoginId());
+        return userHealthResponse;
     }
 
     @Override
@@ -337,6 +341,71 @@ public class UserServiceImpl implements UserService {
         return userDeleteResponse;
     }
 
+    @Override
+    public UserHealthProfileResponse retrieveUserHealthProfileByLoginId(String loginId) throws SystemException {
+        logger.info("Request received -> {}", loginId);
+        if (loginId == null) {
+            logger.error("retrieveUserAccountProfileByLoginId: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        UserAccount userAccount = userAccountRepository.findByLoginId(loginId.toLowerCase());
+        if (userAccount == null) {
+            logger.error("retrieveUserAccountProfileByLoginId: User account doesn't exists");
+            throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+        }
+        if (userAccount != null && userAccount.getHealth_details_status().equalsIgnoreCase(Constants.STATUS_NOT_UPLOADED)) {
+            logger.error("retrieveUserAccountProfileByLoginId: User account exists but not uploaded health details status");
+            throw new SystemException(ApiErrors.USER_HEALTH_STATUS_DOESNOT_EXISTS);
+        }
+
+        UserHealthProfileResponse userHealthProfileResponse = new UserHealthProfileResponse();
+        userHealthProfileResponse.setLoginId(loginId);
+        userHealthProfileResponse.setEmailId(userAccount.getEmailId());
+        userHealthProfileResponse.setAccountStatus(userAccount.getPersonal_details_status());
+        userHealthProfileResponse.setUserHealthDetails(userHealthDetailsRepository.findByLoginId(loginId));
+        return userHealthProfileResponse;
+    }
+
+    @Override
+    public UserHealthProfileResponse retrieveUserHealthProfile(RetrieveUserProfileRequest retrieveUserProfileRequest) throws SystemException {
+        logger.info("Request received -> {}", retrieveUserProfileRequest);
+        if (retrieveUserProfileRequest == null || (Strings.isNullOrEmpty(retrieveUserProfileRequest.getEmailId()) && Strings.isNullOrEmpty(retrieveUserProfileRequest.getLoginId()))) {
+            logger.error("retrieveUserAccountProfile: Missing mandatory data");
+            throw new SystemException(ApiErrors.MISSING_MANDATORY_FIELDS_FOR_ATTRIBUTES);
+        }
+        if (!(Strings.isNullOrEmpty(retrieveUserProfileRequest.getEmailId())) && !(Strings.isNullOrEmpty(retrieveUserProfileRequest.getLoginId()))) {
+            logger.info("retrieveUserAccountProfile: Retrieving user account details for emailId and loginId combination");
+            UserAccount userAccount = userAccountRepository.findByLoginId(retrieveUserProfileRequest.getLoginId().toLowerCase());
+            if (userAccount == null) {
+                logger.error("retrieveUserAccountProfile: User account doesn't exists");
+                throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+            }
+            if (userAccount.getEmailId().equalsIgnoreCase(retrieveUserProfileRequest.getEmailId())) {
+                logger.info("retrieveUserAccountProfile: Retrieving user account details for emailId -> {} and loginId -> {}",
+                        retrieveUserProfileRequest.getEmailId(), retrieveUserProfileRequest.getEmailId());
+                return retrieveUserHealthProfileByLoginId(retrieveUserProfileRequest.getLoginId());
+            } else {
+                logger.error("retrieveUserAccountProfile: User account doesn't exists for emailId -> {} and loginId -> {}",
+                        retrieveUserProfileRequest.getEmailId(), retrieveUserProfileRequest.getEmailId());
+                throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+            }
+        }
+        if (!(Strings.isNullOrEmpty(retrieveUserProfileRequest.getEmailId()))) {
+            logger.info("retrieveUserAccountProfile: Retrieving user account details for emailId -> {}", retrieveUserProfileRequest.getEmailId());
+            UserAccount userAccount = userAccountRepository.findByEmailId(retrieveUserProfileRequest.getEmailId().toLowerCase());
+            if (userAccount == null) {
+                logger.error("retrieveUserAccountProfile: User account doesn't exists for loginId -> {}", retrieveUserProfileRequest.getEmailId());
+                throw new SystemException(ApiErrors.USER_DOESNOT_EXISTS);
+            }
+            logger.info("retrieveUserAccountProfile: User account exists for emailId  -> {}", retrieveUserProfileRequest.getEmailId());
+            return retrieveUserHealthProfileByLoginId(userAccount.getLoginId());
+        }
+        if (!Strings.isNullOrEmpty(retrieveUserProfileRequest.getLoginId())) {
+            logger.info("retrieveUserAccountProfile: Retrieving user account details for loginId -> {}", retrieveUserProfileRequest.getLoginId());
+            return retrieveUserHealthProfileByLoginId(retrieveUserProfileRequest.getLoginId());
+        }
+        return null;
+    }
 
 
 }

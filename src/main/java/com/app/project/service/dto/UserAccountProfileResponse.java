@@ -11,7 +11,6 @@ public class UserAccountProfileResponse implements Serializable {
     private String loginId;
     private String emailId;
     private String accountStatus;
-
     private UserPersonalDetails userPersonalDetails;
 
     public String getLoginId() {

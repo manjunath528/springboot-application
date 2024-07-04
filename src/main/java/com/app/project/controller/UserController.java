@@ -65,20 +65,31 @@ public class UserController extends BaseController {
     }
 
     @PostMapping(value = ApiRoute.USER_ACCOUNT_HEALTH_PROFILE)
-    public ResponseEntity<UserHealthProfileResponse> saveUserHealthProfile(@RequestBody UserHealthProfileRequest userHealthProfileRequest) throws BaseException {
+    public ResponseEntity<UserHealthResponse> saveUserHealthProfile(@RequestBody UserHealthRequest userHealthRequest) throws BaseException {
         logger.info("saveOrUpdateUserHealthProfile: Received");
-        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthProfileRequest, true), HttpStatus.OK);
+        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthRequest, true), HttpStatus.OK);
     }
 
     @PutMapping(value = ApiRoute.USER_ACCOUNT_HEALTH_PROFILE)
-    public ResponseEntity<UserHealthProfileResponse> updateUserHealthProfile(@RequestBody UserHealthProfileRequest userHealthProfileRequest) throws BaseException {
+    public ResponseEntity<UserHealthResponse> updateUserHealthProfile(@RequestBody UserHealthRequest userHealthRequest) throws BaseException {
         logger.info("saveOrUpdateUserHealthProfile: Received");
-        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthProfileRequest, false), HttpStatus.OK);
+        return new ResponseEntity<>(userService.saveOrUpdateUserHealthProfile(userHealthRequest, false), HttpStatus.OK);
     }
     @DeleteMapping(value = ApiRoute.USER_ACCOUNT_DETAILS_DELETE)
     public ResponseEntity<UserDeleteResponse> userAccountDetailsDelete(@RequestParam(value = "loginId") String loginId) throws BaseException {
         logger.info("userAccountDetailsDelete: Received");
         return new ResponseEntity<>(userService.userAccountDetailsDelete(loginId), HttpStatus.OK);
+    }
+    @GetMapping(value = ApiRoute.USER_ACCOUNT_HEALTH_PROFILE)
+    public ResponseEntity<UserHealthProfileResponse> retrieveUserHealthProfileByLoginId(@RequestParam(value = "loginId") String loginId) throws BaseException {
+        logger.info("retrieveUserHealthProfileByLoginId: Received for loginId -> {}", loginId);
+        return new ResponseEntity<>(userService.retrieveUserHealthProfileByLoginId(loginId), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiRoute.USER_HEALTH_PROFILE_RETRIEVE)
+    public ResponseEntity<UserHealthProfileResponse> retrieveUserHealthProfile(@RequestBody RetrieveUserProfileRequest retrieveUserProfileRequest) throws BaseException {
+        logger.info("retrieveUserHealthProfile: Received  -> {}", retrieveUserProfileRequest);
+        return new ResponseEntity<>(userService.retrieveUserHealthProfile(retrieveUserProfileRequest), HttpStatus.OK);
     }
 
 }

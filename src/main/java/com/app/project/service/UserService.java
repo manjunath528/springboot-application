@@ -19,8 +19,12 @@ public interface UserService {
 
     UserAccountProfileResponse retrieveUserAccountProfile(RetrieveUserProfileRequest retrieveUserProfileRequest) throws SystemException;
 
-    UserHealthProfileResponse saveOrUpdateUserHealthProfile(UserHealthProfileRequest userHealthProfileRequest, boolean statusUpdateFlag) throws SystemException;
+    UserHealthResponse saveOrUpdateUserHealthProfile(UserHealthRequest userHealthRequest, boolean statusUpdateFlag) throws SystemException;
 
     UserDeleteResponse userAccountDetailsDelete(String loginId) throws SystemException;
+
+    UserHealthProfileResponse retrieveUserHealthProfileByLoginId(String loginId) throws SystemException;
+
+    UserHealthProfileResponse retrieveUserHealthProfile(RetrieveUserProfileRequest retrieveUserProfileRequest) throws SystemException;
 
 }
