@@ -2,11 +2,10 @@ package com.app.project.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "daily_plan")
-public class DailyPlan {
+public class UserDailyPlan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_daily_plan")
