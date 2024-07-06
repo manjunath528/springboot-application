@@ -5,15 +5,15 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "daily_plan")
-public class UserDailyPlan {
+public class UserDailyDietPlan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_daily_plan")
-    @SequenceGenerator(name = "id_sequence_daily_plan", sequenceName = "sequence_daily_plan", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_user_daily_plan")
+    @SequenceGenerator(name = "id_sequence_user_daily_plan", sequenceName = "sequence_user_daily_plan", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "login_id", unique = true)
+    @Column(name = "login_id")
     private String loginId;
 
     @Column(name = "calories_goal")
