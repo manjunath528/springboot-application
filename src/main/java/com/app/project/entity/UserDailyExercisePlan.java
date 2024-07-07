@@ -1,11 +1,17 @@
 package com.app.project.entity;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "user_exercise_plan")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDailyExercisePlan {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_user_health_details")
-    @SequenceGenerator(name = "id_sequence_user_health_details", sequenceName = "sequence_user_health_details", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_user_exercise_plan")
+    @SequenceGenerator(name = "id_sequence_user_exercise_plan", sequenceName = "sequence_user_exercise_plan", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -26,6 +32,12 @@ public class UserDailyExercisePlan {
 
     @Column(name = "repetitions")
     private Long repetitions;
+
+    @Column(name = "created_ts")
+    private Date createdTs;
+
+    @Column(name = "updated_ts")
+    private Date updatedTs;
 
     public Long getId() {
         return id;
@@ -83,6 +95,22 @@ public class UserDailyExercisePlan {
         this.repetitions = repetitions;
     }
 
+    public Date getCreatedTs() {
+        return createdTs;
+    }
+
+    public void setCreatedTs(Date createdTs) {
+        this.createdTs = createdTs;
+    }
+
+    public Date getUpdatedTs() {
+        return updatedTs;
+    }
+
+    public void setUpdatedTs(Date updatedTs) {
+        this.updatedTs = updatedTs;
+    }
+
     @Override
     public String toString() {
         return "UserDailyExercisePlan{" +
@@ -93,6 +121,8 @@ public class UserDailyExercisePlan {
                 ", duration=" + duration +
                 ", caloriesBurned=" + caloriesBurned +
                 ", repetitions=" + repetitions +
+                ", createdTs=" + createdTs +
+                ", updatedTs=" + updatedTs +
                 '}';
     }
 }

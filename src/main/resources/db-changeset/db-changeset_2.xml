@@ -29,7 +29,7 @@
         />
         <addForeignKeyConstraint baseColumnNames="login_id"
                                  baseTableName="user_health_details"
-                                 constraintName="FMC_FK_USER_ID"
+                                 constraintName="FMC_FK_USER_HEALTH_ID"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="login_id"
@@ -40,7 +40,7 @@
     <changeSet id="user_daily_plan" author="Manjunath Reddy">
         <createTable tableName="user_daily_plan">
             <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_USERDAILYPLAN_ID"/>
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_USER_DAILYPLAN_ID"/>
             </column>
             <column name="login_id" type="varchar(128)"/>
             <column name="calories_goal" type="bigint"/>
@@ -59,7 +59,7 @@
         />
         <addForeignKeyConstraint baseColumnNames="login_id"
                                  baseTableName="user_daily_plan"
-                                 constraintName="FMC_FK_USER_ID"
+                                 constraintName="FMC_FK_USER_DAILYPLAN_ID"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="login_id"
@@ -79,6 +79,8 @@
             <column name="duration" type="bigint"/>
             <column name="calories_burned" type="bigint"/>
             <column name="repetitions" type="bigint"/>
+            <column name="created_ts" type="datetime"/>
+            <column name="updated_ts" type="datetime"/>
         </createTable>
 
         <createSequence sequenceName="sequence_user_exercise_plan"
@@ -88,8 +90,8 @@
                         cycle="true"
         />
         <addForeignKeyConstraint baseColumnNames="login_id"
-                                 baseTableName="daily_plan"
-                                 constraintName="FMC_FK_USER_ID"
+                                 baseTableName="user_exercise_plan"
+                                 constraintName="FMC_FK_USER_EXERCISE_ID"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="login_id"
